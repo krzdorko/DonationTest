@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Acme Gadgets — Spring Sale (Punchy Buggy)</title>
+<style>
+  /* HEAVILY BUGGY VISUAL VERSION */
+
+  /* inconsistent tokens */
+  :root{
+    --brand:#5fa8ff; /* low contrast */
+    --brand-alt:#4f75ff; /* mismatched */
+    --text:#666; /* too light */
+    --accent-red:#ff4b4b;
+    --radius-small:4px;
+    --radius-big:22px;
+    --shadow-soft:0 1px 2px rgba(0,0,0,0.05);
+    --shadow-hard:0 2px 20px rgba(0,0,0,0.25);
+  }
+
+  body{margin:0;font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:#fafafa;}
+
+  /* NAV issues: inconsistent spacing, odd hover, misaligned baseline */
+  .nav{display:flex;align-items:center;padding:6px 10px;gap:6px;background:#fff;border-bottom:1px solid #eaeaea;}
+  .nav a{color:var(--brand);text-decoration:none;font-size:13px;padding:4px 7px;border-radius:var(--radius-small);}
+  .nav a.active{background:#e7f2ff;border:1px solid var(--brand-alt);} /* double style */
+  .nav a:hover{background:#dbe9ff;color:#4a90ff;letter-spacing:0.5px;} /* weird hover */
+
+  /* HERO issues: massive whitespace imbalance, off-center image, mismatched radii */
+  .hero{display:grid;grid-template-columns:1.4fr 0.6fr;align-items:center;padding:18px 10px 60px 10px; /* bottom-heavy */}
+  .hero h1{font-size:30px;margin:0 0 4px 0;color:#333}
+  .hero p{font-size:13px;max-width:40ch;line-height:1.15;margin:0 0 20px 0;color:#777}
+  .cta{display:flex;gap:6px}
+  .btn{padding:8px 12px;border-radius:var(--radius-big);border:1px solid #ccc;background:#fff;color:#444;box-shadow:var(--shadow-soft)}
+  .btn.primary{background:var(--brand);color:#fff;border-color:var(--brand-alt)}
+  .btn.secondary{color:var(--brand-alt)}
+
+  /* HERO IMAGE: misaligned, unpredictable crop */
+  .hero img{width:100%;height:200px;object-fit:none; /* extremely bad */object-position:top left;border-radius:var(--radius-small);box-shadow:var(--shadow-hard);}
+
+  /* GRID issues: inconsistent card shapes, uneven gutters, weird shadows */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:10px;}
+  .card{background:#fff;border:1px solid #eaeaea;border-radius:var(--radius-small);padding:8px;box-shadow:var(--shadow-hard);} /* heavy shadow everywhere */
+  .card h3{margin:6px 0 2px 0;font-size:14px;color:#333}
+  .price{color:#999;font-weight:700;font-size:15px}
+
+  /* DISTORTED IMAGES (again worse than previous) */
+  .thumb{width:100%;height:150px;object-fit:fill; /* distort */border-radius:2px;}
+
+  /* BADGES inconsistent style */
+  .badge{background:#e0ffe0;color:#0a7a0a;padding:1px 5px;font-size:9px;border-radius:var(--radius-big);} /* huge radius on tiny chip */
+
+  /* FOOTER issues: huge drop shadow, weird padding */
+  .footer{margin-top:40px;background:#ffffff;border-top:1px solid #ddd;padding:40px 0;box-shadow:0 -8px 20px rgba(0,0,0,0.15);text-align:center;color:#888;font-size:13px}
+
+  /* RESPONSIVE BREAKPOINTS BROKEN deliberately */
+  @media(max-width:800px){
+    .hero{grid-template-columns:1fr 1fr;gap:4px;} /* too tight */
+    .grid{grid-template-columns:repeat(2,1fr);}  
+    .hero img{height:140px;object-fit:contain;} /* weird jump */
+  }
+  @media(max-width:480px){
+    .hero{grid-template-columns:1fr;padding:50px 6px 10px 6px;} /* huge top padding */
+    .cta{flex-direction:column;align-items:flex-start;} /* buttons misaligned */
+    .grid{grid-template-columns:1fr;} /* ok but late */
+    .card{border-radius:var(--radius-big);} /* exaggerated change */
+  }
+</style>
+</head>
+<body>
+  <nav class="nav">
+    <a href="#" class="active">Home</a>
+    <a href="#">Products</a>
+    <a href="#">About</a>
+    <a href="#">Contact</a>
+  </nav>
+
+  <section class="hero">
+    <div>
+      <h1>Spring deals on Acme gadgets</h1>
+      <p>Upgrade your desk with our latest accessories. Limited‑time bundles and free shipping above $50.</p>
+      <div class="cta">
+        <button class="btn primary">Shop now</button>
+        <button class="btn secondary">Learn more</button>
+      </div>
+    </div>
+    <img src="https://picsum.photos/seed/desk/640/300" alt="Hero" />
+  </section>
+
+  <section class="grid">
+    <article class="card">
+      <img class="thumb" src="https://picsum.photos/seed/1/400/240" alt="Item" />
+      <h3>Desk Lamp</h3>
+      <div><span class="price">$39</span> <span class="badge">in stock</span></div>
+    </article>
+    <article class="card">
+      <img class="thumb" src="https://picsum.photos/seed/2/500/500" alt="Item" />
+      <h3>Ergo Chair</h3>
+      <div><span class="price">$199</span> <span class="badge" style="background:#fff3f3;color:#ff2b2b">low stock</span></div>
+    </article>
+    <article class="card">
+      <img class="thumb" src="https://picsum.photos/seed/3/300/200" alt="Item" />
+      <h3>Cable Kit</h3>
+      <div><span class="price">$19</span> <span class="badge" style="background:#ffe8e8;color:#ff3b3b">sold out</span></div>
+    </article>
+  </section>
+
+  <footer class="footer">© 2026 Acme Corp</footer>
+</body>
+</html>
