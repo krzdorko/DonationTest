@@ -1,0 +1,359 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Donation Widget</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root {
+            --bg: #ffffff;
+            --fg: #111;
+            --muted: #666;
+            --brand: #0d6efd;
+            --danger: #d93025;
+            --focus: #0d6efd; /* Low contrast on white – intentional */
+            --border: #ddd;
+            --radius: 10px;
+            --gap: 12px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.001ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.001ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
+        html, body {
+            height: 100%;
+            background: var(--bg);
+            color: var(--fg);
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+            line-height: 1.5;
+        }
+
+        main {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .card {
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin: 0 0 0.75rem 0;
+        }
+
+        .amounts {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--gap);
+            margin-block: 12px;
+        }
+
+        @media (min-width: 768px) {
+            .amounts {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+
+        .amounts button, .amounts .custom-wrap input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: #fafafa;
+            cursor: pointer;
+        }
+
+            .amounts button[aria-pressed="true"] {
+                background: #e7f0ff;
+                border-color: var(--brand);
+            }
+
+        .custom-wrap input {
+            cursor: text;
+            background: #fff;
+        }
+
+        .field {
+            margin-block: 12px;
+        }
+
+            .field label {
+                display: block;
+                margin-bottom: 6px;
+            }
+
+        .error {
+            color: var(--danger);
+            font-size: 0.95rem;
+            margin-top: 4px;
+            display: none; /* will show when error */
+        }
+
+        .visually-hidden {
+            position: absolute !important;
+            height: 1px;
+            width: 1px;
+            overflow: hidden;
+            clip: rect(1px,1px,1px,1px);
+            white-space: nowrap;
+            border: 0;
+            padding: 0;
+            margin: -1px;
+        }
+
+        .banner {
+            display: none;
+            border: 1px solid #cfe2ff;
+            background: #e7f1ff;
+            color: #084298;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        button, input, a {
+            outline-color: var(--focus); /* Low contrast */
+            outline-offset: 2px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+            .actions button {
+                background: var(--brand);
+                color: white;
+                border: none;
+                padding: 10px 16px;
+                border-radius: 8px;
+            }
+
+                .actions button:disabled {
+                    background: #bbb;
+                    cursor: not-allowed;
+                }
+
+        .terms {
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div id="confirm" class="banner" role="status" aria-live="polite">
+            <span id="confirm-text"></span>
+            <button id="confirm-close" style="float:right">Close</button>
+        </div>
+
+        <section class="card" aria-labelledby="donation-title">
+            <h1 id="donation-title">Make a Donation</h1>
+
+            <form id="donation-form" novalidate>
+                <fieldset class="field" aria-describedby="amount-help">
+                    <legend class="visually-hidden">Select amount</legend>
+                    <div class="amounts" role="group">
+                        <button type="button" class="amount" data-amount="5" aria-pressed="false">$5</button>
+                        <button type="button" class="amount" data-amount="10" aria-pressed="false">$10</button>
+                        <button type="button" class="amount" data-amount="25" aria-pressed="false">$25</button>
+                        <button type="button" class="amount" data-amount="50" aria-pressed="false">$50</button>
+                        <div class="custom-wrap">
+                            <label for="custom" class="visually-hidden">Custom amount</label>
+                            <input id="custom" name="custom" inputmode="decimal" placeholder="Enter amount (USD)" />
+                        </div>
+                    </div>
+                    <p id="amount-help" class="terms">Choose a preset or enter a custom amount.</p>
+                    <p class="error" id="amount-error">Please choose or enter an amount.</p>
+                </fieldset>
+
+                <fieldset class="field">
+                    <legend>Frequency</legend>
+                    <label><input type="radio" name="freq" value="one-time" checked> One-time</label>
+                    <label><input type="radio" name="freq" value="monthly"> Monthly</label>
+                </fieldset>
+
+                <div class="field">
+                    <label for="email">Email (optional)</label>
+                    <input id="email" name="email" type="email" placeholder="you@example.com">
+                    <p class="error" id="email-error">Please enter a valid email address.</p>
+                </div>
+
+                <div class="field">
+                    <label><input type="checkbox" id="consent"> I agree to the #termsterms</a>.</label>
+                    <p class="error" id="consent-error">You must agree to proceed.</p>
+                </div>
+
+                <div class="actions">
+                    <button id="donate" type="submit" disabled>Donate</button>
+                </div>
+            </form>
+
+            <hr />
+
+            <section id="terms" aria-label="Terms">
+                <h2>Terms</h2>
+                <p class="terms">Donations are processed in USD. This is demo content.</p>
+            </section>
+        </section>
+    </main>
+
+    <script>
+    // Intentional issues:
+    // - Inconsistent localStorage keys
+    // - Weak amount parsing
+    // - Enter key may submit even when invalid
+    // - Errors not wired with aria-describedby
+
+    const amountButtons = Array.from(document.querySelectorAll('.amount'));
+    const customInput = document.getElementById('custom');
+    const donateBtn = document.getElementById('donate');
+    const form = document.getElementById('donation-form');
+    const consent = document.getElementById('consent');
+    const email = document.getElementById('email');
+    const banner = document.getElementById('confirm');
+    const bannerText = document.getElementById('confirm-text');
+    const bannerClose = document.getElementById('confirm-close');
+
+    function saveState() {
+      localStorage.setItem('donation_amount', getSelectedAmountRaw());
+      localStorage.setItem('donation_freq', getFrequency());
+      localStorage.setItem('emailAddress', email.value); // inconsistent key on purpose
+    }
+    function loadState() {
+      const a = localStorage.getItem('donation_amount');
+      const f = localStorage.getItem('donation_freq');
+      const e = localStorage.getItem('email');
+      if (a) {
+        if (!isNaN(+a)) {
+          setAmount(+a);
+        }
+      }
+      if (f) setFrequency(f);
+      if (e) email.value = e;
+    }
+
+    function getFrequency() {
+      const checked = document.querySelector('input[name="freq"]:checked');
+      return checked ? checked.value : 'one-time';
+    }
+    function setFrequency(val) {
+      const radios = document.querySelectorAll('input[name="freq"]');
+      radios.forEach(r => r.checked = (r.value === val));
+    }
+
+    function setAmount(val) {
+      amountButtons.forEach(btn => {
+        btn.setAttribute('aria-pressed', btn.dataset.amount === String(val));
+      });
+      if (!['5', '10', '25', '50'].includes(String(val))) {
+        customInput.value = val;
+        amountButtons.forEach(btn => btn.setAttribute('aria-pressed', 'false'));
+      } else {
+        customInput.value = '';
+      }
+      validate();
+    }
+
+    function getSelectedAmountRaw() {
+      const pressed = amountButtons.find(b => b.getAttribute('aria-pressed') === 'true');
+      if (pressed) return pressed.dataset.amount;
+      if (customInput.value) return customInput.value;
+      return '';
+    }
+
+    function parseAmount(val) {
+      // Too permissive on purpose
+      const cleaned = String(val).replace(/[^0-9.]/g, '');
+      return parseFloat(cleaned);
+    }
+
+    function formatAmount(n) {
+      return (Math.round(n * 100) / 100).toFixed(2);
+    }
+
+    function showError(id, show, message) {
+      const el = document.getElementById(id);
+      if (message) el.textContent = message;
+      el.style.display = show ? 'block' : 'none';
+    }
+
+    function validate() {
+      const raw = getSelectedAmountRaw();
+      const amt = parseAmount(raw);
+      let amountValid = false;
+      if (!raw) {
+        showError('amount-error', true, 'Please choose or enter an amount.');
+      } else if (isNaN(amt) || amt < 1 || amt > 500) {
+        showError('amount-error', true, 'Amount must be between $1.00 and $500.00.');
+      } else {
+        showError('amount-error', false);
+        amountValid = true;
+      }
+
+      let emailValid = true;
+      if (email.value && !email.checkValidity()) {
+        showError('email-error', true);
+        emailValid = false;
+      } else {
+        showError('email-error', false);
+      }
+
+      let consentValid = consent.checked;
+      showError('consent-error', !consentValid);
+
+      donateBtn.disabled = !(amountValid && consentValid && emailValid);
+      return donateBtn.disabled === false;
+    }
+
+    amountButtons.forEach(btn => {
+      btn.addEventListener('click', () => setAmount(btn.dataset.amount));
+    });
+
+    customInput.addEventListener('input', () => {
+      amountButtons.forEach(btn => btn.setAttribute('aria-pressed', 'false'));
+      validate();
+    });
+    customInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        // BUG: will submit even if invalid
+        form.requestSubmit();
+      }
+    });
+    email.addEventListener('blur', validate);
+    consent.addEventListener('change', validate);
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!validate()) return;
+
+      const raw = getSelectedAmountRaw();
+      const amt = parseAmount(raw);
+      const freq = getFrequency();
+      const msg = `Thank you for your $${formatAmount(amt)} ${freq} donation!`;
+      bannerText.textContent = msg;
+      banner.style.display = 'block';
+      saveState();
+    });
+
+    bannerClose.addEventListener('click', () => {
+      banner.style.display = 'none';
+    });
+
+    loadState();
+    validate();
+    </script>
+</body>
+</html>
