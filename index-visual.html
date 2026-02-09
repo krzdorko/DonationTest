@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Acme Gadgets — Spring Sale</title>
+<style>
+  /* INTENTIONALLY BUGGY (visual issues only) */
+  :root{
+    --brand:#6ab7ff; /* low contrast on white in small text */
+    --text:#777;     /* too light for body copy */
+    --muted:#999;    /* also light */
+    --accent:#ff3b3b;
+  }
+  html,body{margin:0;padding:0;font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;color:var(--text);}
+  .nav{
+    position:sticky;top:0;z-index:1;
+    display:flex;align-items:center;gap:10px;padding:10px 12px;
+    background:#fff;border-bottom:1px solid #eee;
+  }
+  .logo{height:28px;image-rendering:auto;}
+  /* non-retina image scaled up → blurry */
+  .logo img{height:28px;width:auto;image-rendering: auto;}
+
+  .nav a{color:#6ab7ff;text-decoration:none;font-size:13px;padding:6px 8px;border-radius:14px;border:1px solid transparent;}
+  .nav a.active{background:#eaf4ff;color:#6ab7ff;}
+  /* Hover has almost no visible change */
+  .nav a:hover{background:#f7fbff}
+
+  .hero{
+    display:grid;grid-template-columns: 1.1fr 0.9fr;align-items:center;
+    padding:16px 12px; /* cramped */
+    border-bottom:1px solid #eee
+  }
+  .hero h1{font-size:28px;line-height:1.05;margin:8px 0 6px 0;letter-spacing:-0.5px}
+  .hero p{font-size:14px;line-height:1.2;margin:0 0 8px 0;max-width:42ch;color:#888}
+  .hero .cta{display:flex;gap:8px}
+  .btn{padding:8px 10px;border-radius:6px;border:1px solid #ddd;background:#fff;color:#333;font-weight:600;box-shadow:0 0 0 0 rgba(0,0,0,0.05)}
+  .btn.primary{background:#6ab7ff;color:#fff;border-color:#6ab7ff}
+  .btn.secondary{background:#fff;color:#6ab7ff;border-color:#6ab7ff}
+
+  /* Inconsistent card grid and gutters */
+  .grid{display:grid;grid-template-columns: repeat(3, 1fr);gap:14px;padding:14px}
+  .card{border:1px solid #eee;border-radius:6px;padding:10px;background:#fff;box-shadow: 0 1px 1px rgba(0,0,0,0.04)}
+  .card h3{font-size:16px;margin:4px 0 2px 0;color:#666}
+  .price{color:#aaa;font-weight:700}
+  .badge{display:inline-block;background:#e8ffe8;color:#25a244;padding:2px 6px;border-radius:11px;font-size:10px}
+
+  /* Image aspect ratio distortion */
+  .thumb{width:100%;height:120px;object-fit:fill;border-bottom:1px solid #f0f0f0}
+
+  /* Footer overlaps content on some screens due to fixed height */
+  .footer{margin-top:24px;background:#fafafa;border-top:1px solid #eee;height:120px;display:flex;align-items:center;justify-content:center;color:#999}
+
+  /* Problematic breakpoints: jumps too late, causes overflow on 360px */
+  @media (max-width: 480px){
+    .hero{grid-template-columns:1fr;}
+    .grid{grid-template-columns: repeat(2, 1fr);}
+  }
+</style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="logo"><img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iMjgiIHZpZXdCb3g9IjAgMCA4MCAyOCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGV4dCB4PSIwIiB5PSIyMCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXdlaWdodD0iNjAwIiBmb250LXNpemU9IjI0Ij5BY21lPC90ZXh0Pjwvc3ZnPiIgYWx0=" alt="Acme"/></div>
+    <a href="#" class="active">Home</a>
+    <a href="#">Products</a>
+    <a href="#">About</a>
+    <a href="#">Contact</a>
+  </nav>
+
+  <section class="hero">
+    <div>
+      <h1>Spring deals on Acme gadgets</h1>
+      <p>Upgrade your desk with our latest accessories. Limited‑time bundles and free shipping above $50.</p>
+      <div class="cta">
+        <button class="btn primary">Shop now</button>
+        <button class="btn secondary">Learn more</button>
+      </div>
+    </div>
+    <img class="thumb" src="https://picsum.photos/seed/desk/640/300" alt="Hero"/>
+  </section>
+
+  <section class="grid">
+    <article class="card">
+      <img class="thumb" src="https://picsum.photos/seed/1/400/240" alt="Gadget 1"/>
+      <h3>Desk Lamp</h3>
+      <div><span class="price">$39</span> <span class="badge">in stock</span></div>
+    </article>
+    <article class="card">
+      <img class="thumb" src="https://picsum.photos/seed/2/500/500" alt="Gadget 2"/>
+      <h3>Ergo Chair</h3>
+      <div><span class="price">$199</span> <span class="badge" style="background:#fff3e0;color:#ff8f00">low stock</span></div>
+    </article>
+    <article class="card">
+      <img class="thumb" src="https://picsum.photos/seed/3/300/200" alt="Gadget 3"/>
+      <h3>Cable Kit</h3>
+      <div><span class="price" style="color:#bbb">$19</span> <span class="badge" style="background:#ffe8e8;color:#ff3b3b">sold out</span></div>
+    </article>
+  </section>
+
+  <footer class="footer">© 2026 Acme Corp</footer>
+</body>
+</html>
